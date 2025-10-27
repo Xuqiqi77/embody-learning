@@ -1,4 +1,4 @@
-1. INTRO
+**1. INTRO**
 
 manipulation : 精细行为
 lowlevel - task level
@@ -17,7 +17,7 @@ ros使用差分方程语言
 
 drake  - 机器人动力学 库
 
-2. robot
+**2. robot**
 
 关节位置sensor 关节扭矩sensor touch sensor
 most:positon-control
@@ -28,7 +28,7 @@ torque control: safety
 
 重力补偿
 
-3.1 basic pick and place  
+**3.1 basic pick and place**
 
 context: x[n+1]= f(x[n],u[n],w[n],n,p)
                 state, input, noise, time, parameter
@@ -72,5 +72,11 @@ slurp
 add body: +6 freedom
 add joint: 根据关节类型减少自由度
 
-3.2 basic pick and place
+**3.2 basic pick and place**
 
+rotation matrix: 3*3 Rt * R = I
+欧拉角 Roll Pitch Yaw no constraints
+Axis angle: 旋转轴和旋转角度 [x;y;z] no constraints
+unit quaternion: w,x,y,z   1 constraints w^2 + x^2 + y^2 + z^2 = 1
+
+V(A,B)[G] = R[G,F]*V(A,B)[F]
