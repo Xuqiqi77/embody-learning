@@ -1,0 +1,4 @@
+基于DDS的Discovery机制，无Master节点 
+使用ament和colcon构建项目，替代catkin
+discovery机制，节点之间可以自动发现并建立通信
+intra-process communication，进程内通信

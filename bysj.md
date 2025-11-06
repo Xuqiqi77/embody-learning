@@ -290,3 +290,43 @@ TaskOne_solver() / TaskTwo_solver()：任务总调度。
 ![alt text](image-6.png)
 
 
+----------------------------------
+# 代码部分
+StairClimbingPlanner.py
+
+
+tasksovler初始化 -> startlaunch -> init_ros
+
+主动调用controller/solver的 get_action/next_action -> process_obs -> obs_to_action -> 循环并以action形式发布数据
+
+get_foot_pose_traj_msg,generate_steps,get_multiple_steps_msg
+生成多步步态消息
+
+do_action
+
+
+
+---
+democontroller 93 line
+
+多模态大模型优化
+蒸馏 微调（小模型通过模仿大模型的输出学到知识，而不直接看原始数据 再训练一段时间）
+用 GPT-4 生成回答数据，训练一个 7B 参数的模型 → 得到 MiniGPT-4
+
+
+COT Grounding
+chain of thought 边想边说 
+grounding 基于外部知识(rag，多模态)
+
+KL散度
+衡量一个概率分布P和另一个分布Q有多不一样
+训练一个模型等价于最小化 KL 散度
+
+多模态实现
+CLIP 是一种把「图像」和「文字」训练到同一个语义空间的模型
+
+第一关rl
+第二关多模态
+变智能
+
+
