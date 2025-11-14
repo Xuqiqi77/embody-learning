@@ -295,16 +295,188 @@ TaskOne_solver() / TaskTwo_solver()：任务总调度。
 StairClimbingPlanner.py
 
 
-tasksovler初始化 -> startlaunch -> init_ros
+tasksovler初始化 -> startlaunch(roslaunch 文件启动一堆节点) -> init_ros
 
 主动调用controller/solver的 get_action/next_action -> process_obs -> obs_to_action -> 循环并以action形式发布数据
 
 get_foot_pose_traj_msg,generate_steps,get_multiple_steps_msg
 生成多步步态消息
 
+
+
+joint_command_callback:根据joint_cmd中的数据
+
+## 自写逻辑
+process_obs -> obs_to_action -> task1/2
+
 do_action
+左右转 前后左右走
+move
+调用步态接口
+walk
+调用行走接口
+action_is_finished
+当前动作是否完成(state 0 且 stance false->state 1  ||| state 1 且 stance true -> 等待10s变state2)
+
+### task1  stage 0-8
 
 
+0 初始化 1对准楼梯方向
+
+#counter1用来计数连续检测到楼梯的次数/当前阶段进度
+#counter2用来避免do_action()重发发布消息
+#counter3用来等待机器人站稳
+self.action_state=0  #0表示未开始，1表示进行中，2表示已完成
+
+2 导航到楼梯前
+**from .depth_process import process_depth** ??
+对每个 x 取 y 最大的点，构成“楼梯下沿轮廓”
+左边缘 = 最小 x；
+右边缘 = 最大 x；
+
+3 上楼梯
+#counter0用来计数上楼梯的步骤
+
+**go_to_point** ?
+**move_to_point** ?   走到楼梯跟前
+
+姿态微调
+调用上楼规划器
+
+**不断调节self.torso_traj**
+
+4 检测是否完全上楼并调整姿态
+
+当 pitch 接近水平（>-0.8 rad），说明脚下地面已经平了
+通过扫描 mask 特定行（y=150 和 y=250）的左右边缘点来计算地面倾斜与偏心
+
+计算左右拍摄图像斜率(?不应该近大远小吗)
+
+5 检测机器人是否完全通过楼梯并在平台上调整姿态
+
+与前一阶段类似
+同样用 RANSAC 拟合地面，但判断法向量是否接近水平（pitch<-0.9）
+
+7 第七阶段求解器，平台末端精细对齐与前进
+#counter0用来计数,减少重复调用
+如果检测框几乎覆盖整个画面高度（y1<5 且 y2>250），说明条纹很近、已经到达平台边缘；
+连续检测 3 次以防误判；
+然后进入下一阶段（stage=8）
+
+没有检测到就小步前进
+**如果平台变很长怎么办**?
+
+8 检测绿色区域并完成最终前进与转向
+构成一个条纹下沿的轮廓线,记录最低点
+
+### 辅助函数 
+静态写死的坐标
+当前的朝向需要主动传入
+
+go_to_point  距离很小直接取消 角度差距很小直接走一半距离s
+move_to_point  若仍有轻微偏差，设定 x/y/delta 的最小微调速度（0.1）。
+如果有任何方向仍偏差较大：执行一次 move() 并返回 0（表示仍在移动）。
+若全部偏差在 0.05 内：保存当前残差并返回 1（表示到达完成）。
+
+obj9由于位置需要特殊处理
+
+
+#counter4 用来表示#arm angle / 当前等待进度
+pick_object
+每一步均等待若干次循环
+0:初始准备（腕部内外旋）   将双臂从收拢姿态摆到抓取准备位。
+1:抬臂靠近目标物体
+1.5:微调（姿态校正）
+2:张开手指（准备抓取）
+3:执行抓取动作
+4:握紧确认
+5:抬起手臂（提物）
+6:复位（动作完成） 【?
+
+place_object
+0:
+1:
+2:
+2.5:
+3:
+4:
+4.5:
+5:
+6:
+类似逻辑，机械般一步步放置
+
+detect_object
+判断当前物品的类型
+
+move_to_target_object
+特别生硬写死角度
+
+move_closer_and_pick
+同上对应写死
+
+go_to_observe
+到观察点拍照
+
+start_search
+go_to_observe -> search_following_object
+        1. 如果还未找到任何目标物体，调用 search_following_object() 开始搜索。
+        2. 如果已找到部分目标物体且未完成全部任务，分为两种情况：
+            - 若当前在箱子处，调用 from_container_to_object() 导航到下一个目标物体，并判断是否为目标物体。
+            - 若不在箱子处，调用 search_following_object() 继续搜索和抓取流程。
+        3. 如果已完成全部目标物体的抓取与搬运，则切换到 stage=10，进入任务结束或下一个流程。
+
+search_following_object
+to_next_object -> move_to_target_object -> detect_object-> to_next_object/move_closer_and_pick -> back_to container -> palce_object -> move_to_point 
+
+to_next_object
+写死行列，角度和关键经过点
+
+from_container_to_object
+类似于to_next_object
+
+back_to_container
+相同的写死逻辑
+
+TaskTwo_solver
+stage9_solver stage10_solver
+
+stage9_solver
+初始化调整姿态之后进入 start_search
+
+grab_container/place_container
+逻辑类似,写死动作
+
+stage10_solver
+move_to_point[container] -> move_to_point[containergrab]
+
+
+### 其他文件中的内容
+
+
+
+
+-----
+优化的地方
+先试试第二阶段导航建图？
+
+
+now：当在做一个动作的时候调用action_is_finished()确保完成之后再进行下一个动作
+stage1 只能turnleft?
+stage2 写死? 顺序执行?
+get_pos所有都写死？
+stage8 移动数据写死?
+
+detect_object没有使用VLM
+move_to_target_object
+特别生硬写死角度
+没有检测是否真的抓取到了物体
+
+厂商遥控器控制机器人的具体逻辑
+
+导航使用关键点行走模式
+是否可以扫描建图然后标记物品坐标和形状->接到目标之后直接调用VLM然后根据目标位置自行规划路线(ROS导航系统)
+
+残差强化学习在哪里?
 
 ---
 democontroller 93 line
@@ -330,3 +502,18 @@ CLIP 是一种把「图像」和「文字」训练到同一个语义空间的模
 变智能
 
 
+------------------------------------------------------
+扫描建图,
+结合VLM辅助建图，
+建图后使用VLM配合进行环绕规划，
+
+
+检测到东西后使用VLM进行抓取规划？
+
+----------------------------
+我添加的：
+新建线程发布器，发布ros节点信息，以便在其他软件包中运行对应逻辑
+
+先分开、后集成完全没问题；
+ROS 的通信层是运行时解耦的，工作空间只是构建和组织问题；
+只要环境正确 source，就能随意跨 workspace 协作
