@@ -1,0 +1,31 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0" version="29.2.7">
+  <diagram name="第 1 页" id="q2vXUf-HoCIm99ccfz-M">
+    <mxGraphModel dx="776" dy="1133" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="foYp8n3V8mpjY2P5urJQ-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" value="人形具身智能应用场景" vertex="1">
+          <mxGeometry height="160" width="240" x="40" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="foYp8n3V8mpjY2P5urJQ-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" value="大模型与具身智能的集成" vertex="1">
+          <mxGeometry height="160" width="240" x="600" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="foYp8n3V8mpjY2P5urJQ-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" value="具身抓取/搬运任务" vertex="1">
+          <mxGeometry height="160" width="240" x="600" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="foYp8n3V8mpjY2P5urJQ-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" value="具身智能的实时长程任务" vertex="1">
+          <mxGeometry height="160" width="240" x="40" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="foYp8n3V8mpjY2P5urJQ-9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" value="人形具身智能双指抓取/搬运任务" vertex="1">
+          <mxGeometry height="160" width="240" x="320" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="foYp8n3V8mpjY2P5urJQ-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" value="大模型让具身“智能”" vertex="1">
+          <mxGeometry height="160" width="240" x="320" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="foYp8n3V8mpjY2P5urJQ-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" value="构建多模态大模型辅助的人形具身智能长程任务执行系统" vertex="1">
+          <mxGeometry height="160" width="240" x="320" y="360" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
